@@ -1,0 +1,42 @@
+@use '/src/variables.scss' as vars;
+.container {
+    margin-top: 40px;
+    width: 40vw;
+    min-width: 360px;
+    height: 300px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    @include vars.shadows($pixels: 3px);
+
+    .messageContainer {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        gap: 20px;
+
+        .errorIcon {
+            position: absolute;
+            top: calc(50% - 30px);
+            left: -80px;
+        }
+        .pageReload {
+            background-color: transparent;
+            position: absolute;
+            top: calc(50% - 30px);
+            right: -80px;
+            .reloadIcon {
+                fill: vars.$baseColor;
+                transition: fill 150ms ease-in-out;
+                &:hover,
+                &:focus {
+                    fill: vars.$baseHoverColor;
+                }
+            }
+        }
+    }
+}

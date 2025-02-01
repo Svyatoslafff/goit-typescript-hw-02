@@ -1,0 +1,17 @@
+@use '/src/variables.scss' as vars;
+
+.loadMore {
+    color: #fff;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 0.6em 1.2em;
+    background-color: vars.$baseColor;
+    cursor: pointer;
+    transition: all 0.25s ease-in-out;
+    @include vars.shadows;
+    &:hover,
+    &:focus {
+        @include vars.shadows(true, vars.$baseColor);
+        background-color: vars.$baseHoverColor;
+    }
+}

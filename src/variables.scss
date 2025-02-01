@@ -1,0 +1,34 @@
+// variables
+$baseColor: #424bf8;
+$baseHoverColor: #5e66fd;
+
+// mixins
+@mixin shadows($inset: false, $color: #7e7e7e81, $pixels: 2px) {
+    @if $inset == false {
+        box-shadow:
+            calc(0px - $pixels) calc(0px - $pixels) 5px $color,
+            $pixels $pixels 5px $color,
+            $pixels calc(0px - $pixels) 5px $color,
+            calc(0px - $pixels) $pixels 5px $color;
+    } @else {
+        box-shadow:
+            calc(0px - $pixels) calc(0px - $pixels) 5px $color,
+            $pixels $pixels 5px $color,
+            $pixels calc(0px - $pixels) 5px $color,
+            calc(0px - $pixels) $pixels 5px $color,
+            calc(0px - $pixels) calc(0px - $pixels) 5px inset $color,
+            $pixels $pixels 5px inset $color;
+    }
+}
+@mixin inputBorder() {
+    border: 1px solid transparent;
+    border-radius: 5px;
+    outline: 0 solid transparent;
+    transition:
+        border-color 125ms ease-in-out,
+        outline 125ms ease-in-out;
+    &:hover,
+    &:focus {
+        outline: 1px solid #ffffff;
+    }
+}

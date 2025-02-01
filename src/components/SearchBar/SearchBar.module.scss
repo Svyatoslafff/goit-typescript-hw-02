@@ -1,0 +1,61 @@
+@use '/src/variables.scss' as vars;
+
+.header {
+    width: 100vw;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: vars.$baseColor;
+    @include vars.shadows;
+    .formContainer {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        .perPageInput {
+            height: 25px;
+            width: 55px;
+            padding-left: 15px;
+            text-align: center;
+            @include vars.inputBorder;
+        }
+        .searchBar {
+            display: flex;
+            position: relative;
+            height: 30px;
+            max-width: 300px;
+            min-width: 200px;
+            width: 100%;
+            .requestInput {
+                padding: 5px 10px 5px 30px;
+                width: 100%;
+                @include vars.inputBorder;
+            }
+            button {
+                height: 24px;
+                left: calc(30px / 2 - 8px);
+                top: calc(50% - 12px);
+                background-color: transparent;
+                position: absolute;
+                padding: 0;
+                transition: transform 150ms ease-in-out;
+                display: flex;
+                align-items: center;
+                &:hover {
+                    transform: scale(1.05);
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: 768px) {
+    .header {
+        .formContainer {
+            gap: 20px;
+            .searchBar {
+                height: 40px;
+            }
+        }
+    }
+}

@@ -1,0 +1,18 @@
+@use '/src/variables.scss' as vars;
+.smallImage {
+    aspect-ratio: 16 / 10;
+    width: 200px;
+    @include vars.shadows;
+
+    transition: transform 150ms ease-in-out;
+    &:hover {
+        transform: scale(1.01);
+        cursor: zoom-in;
+    }
+}
+
+@media (min-width: 768px) {
+    .smallImage {
+        width: 400px;
+    }
+}
