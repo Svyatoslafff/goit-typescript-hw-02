@@ -1,9 +1,10 @@
 @use '/src/variables.scss' as vars;
-.container {
-    margin-top: 40px;
+.errorContainer {
+    margin-top: 60px;
+    padding: 20px 30px;
     width: 40vw;
-    min-width: 360px;
-    height: 300px;
+    min-width: 280px;
+    height: 200px;
     border-radius: 5px;
     display: flex;
     justify-content: center;
@@ -19,16 +20,22 @@
         position: relative;
         gap: 20px;
 
+        h2 {
+            text-align: center;
+        }
         .errorIcon {
             position: absolute;
-            top: calc(50% - 30px);
-            left: -80px;
+            bottom: -100px;
+            left: 20%;
         }
         .pageReload {
             background-color: transparent;
             position: absolute;
-            top: calc(50% - 30px);
-            right: -80px;
+            bottom: -100px;
+            right: 20%;
+            padding: 0;
+            width: 60px;
+            height: 60px;
             .reloadIcon {
                 fill: vars.$baseColor;
                 transition: fill 150ms ease-in-out;
@@ -36,6 +43,32 @@
                 &:focus {
                     fill: vars.$baseHoverColor;
                 }
+            }
+        }
+    }
+}
+
+@media (min-width: 768px) {
+    .errorContainer {
+        .messageContainer {
+            .errorIcon {
+                top: calc(50% - 30px);
+                left: -100px;
+                bottom: 0;
+            }
+            .pageReload {
+                bottom: 0;
+
+                top: calc(50% - 30px);
+                right: -100px;
+                // .reloadIcon {
+                //     fill: vars.$baseColor;
+                //     transition: fill 150ms ease-in-out;
+                //     &:hover,
+                //     &:focus {
+                //         fill: vars.$baseHoverColor;
+                //     }
+                // }
             }
         }
     }

@@ -4,7 +4,7 @@ import css from './ErrorMessage.module.scss';
 
 export default function ErrorMessage({ message }) {
     return (
-        <div className={css.container}>
+        <div className={css.errorContainer}>
             <div className={css.messageContainer}>
                 <MdOutlineError
                     color="#ff4f4f"

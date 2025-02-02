@@ -9,6 +9,7 @@ import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 import { ThreeDots } from 'react-loader-spinner';
 import toast from 'react-hot-toast';
+import { animateScroll as scroll } from 'react-scroll';
 
 function App() {
     const [images, setImages] = useState([]);
@@ -17,6 +18,7 @@ function App() {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [isError, setIsError] = useState(false);
+    const [imageToScroll, setImageToScroll] = useState('');
 
     useEffect(() => {
         async function getData() {
@@ -50,12 +52,25 @@ function App() {
                     toast.error("You've reached the last page");
                 }
 
-                setImages([...images, ...newImages.results]);
+                console.log(newImages);
+                const imagesToShow = newImages.results;
+                console.log(imagesToShow);
+
+                setImageToScroll(imagesToShow[0].id);
+
+                setImages([...images, ...imagesToShow]);
             } catch (error) {
                 toast.error('Error');
                 setIsError(error);
             } finally {
                 setLoaderIsActive(false);
+                if (page !== 1) {
+                    scroll.scrollMore(
+                        document
+                            .querySelector(`#${imageToScroll}`)
+                            .getBoundingClientRect().height * 2
+                    );
+                }
             }
         }
         getData();
@@ -77,7 +92,7 @@ function App() {
             <SearchBar onSearch={onSearch} perPage={request.perPage} />
             <main>
                 {isError === false ? (
-                    <ImageGallery images={images} />
+                    <ImageGallery images={images} scrollToId={imageToScroll} />
                 ) : (
                     <ErrorMessage message={isError.message} />
                 )}

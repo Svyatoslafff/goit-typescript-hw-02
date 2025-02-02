@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+
 import ImageModal from '../ImageModal/ImageModal';
 import css from './ImageCard.module.scss';
 
