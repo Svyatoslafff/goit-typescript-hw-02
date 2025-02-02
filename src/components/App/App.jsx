@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import './App.module.scss';
+import css from './App.module.scss';
 import * as api from '/src/api.js';
 import SearchBar from '../SearchBar/SearchBar';
 import ImageGallery from '../ImageGallery/ImageGallery';
