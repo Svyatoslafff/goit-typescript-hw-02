@@ -90,7 +90,7 @@ function App() {
     return (
         <>
             <SearchBar onSearch={onSearch} perPage={request.perPage} />
-            <main>
+            <main className={css.main}>
                 {isError === false ? (
                     <ImageGallery images={images} scrollToId={imageToScroll} />
                 ) : (
