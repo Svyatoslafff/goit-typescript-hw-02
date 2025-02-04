@@ -1,5 +1,5 @@
-import css from './LoadMoreButton.module.scss';
-export default function LoadMoreButton({ onLoadMore }) {
+import css from './LoadMoreBtn.module.scss';
+export default function LoadMoreBtn({ onLoadMore }) {
     function handleClick() {
         onLoadMore();
     }

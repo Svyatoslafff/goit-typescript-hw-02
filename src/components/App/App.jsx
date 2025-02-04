@@ -4,22 +4,24 @@ import css from './App.module.scss';
 import * as api from '/src/api.js';
 import SearchBar from '../SearchBar/SearchBar';
 import ImageGallery from '../ImageGallery/ImageGallery';
-import LoadMoreButton from '../LoadMoreButton/LoadMoreButton';
+import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 import { ThreeDots } from 'react-loader-spinner';
 import toast from 'react-hot-toast';
 import { animateScroll as scroll } from 'react-scroll';
+import ImageModal from '../ImageModal/ImageModal';
 
 function App() {
+    // states
     const [images, setImages] = useState([]);
     const [request, setRequest] = useState({ query: 'animals', perPage: 9 });
     const [loaderIsActive, setLoaderIsActive] = useState(false);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [isError, setIsError] = useState(false);
-    const [imageToScroll, setImageToScroll] = useState('');
 
+    // images loading
     useEffect(() => {
         async function getData() {
             try {
@@ -52,12 +54,7 @@ function App() {
                     toast.error("You've reached the last page");
                 }
 
-                console.log(newImages);
                 const imagesToShow = newImages.results;
-                console.log(imagesToShow);
-
-                setImageToScroll(imagesToShow[0].id);
-
                 setImages([...images, ...imagesToShow]);
             } catch (error) {
                 toast.error('Error');
@@ -65,11 +62,12 @@ function App() {
             } finally {
                 setLoaderIsActive(false);
                 if (page !== 1) {
-                    scroll.scrollMore(
-                        document
-                            .querySelector(`#${imageToScroll}`)
-                            .getBoundingClientRect().height * 2
-                    );
+                    const scrollHeight = screen.height - 120 * 2;
+                    console.log(scrollHeight);
+
+                    scroll.scrollMore(scrollHeight, {
+                        behabior: 'smooth',
+                    });
                 }
             }
         }
@@ -87,12 +85,54 @@ function App() {
         setPage(previousPage => previousPage + 1);
     }
 
+    // Modal
+    const [isOpenModal, setIsOpenModal] = useState(false);
+    const [modalUserInfo, setModalUserInfo] = useState({
+        likes: 0,
+        user: '',
+        regularImgUrl: '',
+        alt_description: '',
+    });
+
+    useEffect(() => {
+        const body = document.querySelector('body');
+        if (isOpenModal === true) {
+            body.classList.add('body-scroll-lock');
+        } else {
+            body.classList.remove('body-scroll-lock');
+        }
+    }, [isOpenModal]);
+
+    function openModal(id) {
+        const {
+            likes,
+            user,
+            alt_description,
+            urls: { regular },
+        } = images.find(image => image.id === id);
+
+        setModalUserInfo({
+            likes,
+            user,
+            regularImgUrl: regular,
+            alt_description,
+        });
+        setIsOpenModal(true);
+    }
+    function closeModal() {
+        setIsOpenModal(false);
+    }
+
     return (
         <>
             <SearchBar onSearch={onSearch} perPage={request.perPage} />
             <main className={css.main}>
                 {isError === false ? (
-                    <ImageGallery images={images} scrollToId={imageToScroll} />
+                    <ImageGallery
+                        images={images}
+                        onOpenModal={openModal}
+                        onCloseModal={closeModal}
+                    />
                 ) : (
                     <ErrorMessage message={isError.message} />
                 )}
@@ -112,9 +152,17 @@ function App() {
                     isError === false &&
                     page !== totalPages &&
                     loaderIsActive === false && (
-                        <LoadMoreButton onLoadMore={onLoadMore} />
+                        <LoadMoreBtn onLoadMore={onLoadMore} />
                     )}
             </main>
+            <ImageModal
+                isOpen={isOpenModal}
+                closeModal={closeModal}
+                likes={modalUserInfo.likes}
+                creator={modalUserInfo.user}
+                img={modalUserInfo.regularImgUrl}
+                alt={modalUserInfo.alt_description}
+            />
         </>
     );
 }
