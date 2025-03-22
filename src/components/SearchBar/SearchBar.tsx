@@ -48,7 +48,7 @@ export default function SearchBar({ onSearch, perPage }: types.SearchBarProps) {
                             className={css.requestInput}
                         />
                         <button type="submit">
-                            ''
+                            {''}
                             <GrSearch color="black" />
                         </button>
                     </div>

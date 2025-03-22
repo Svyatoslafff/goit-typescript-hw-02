@@ -18,7 +18,7 @@ export default function ErrorMessage({ message }: { message: string }) {
                     className={css.pageReload}
                     onClick={() => window.location.reload()}
                 >
-                    ''
+                    {''}
                     <IoReloadCircle size={60} className={css.reloadIcon} />
                 </button>
             </div>
