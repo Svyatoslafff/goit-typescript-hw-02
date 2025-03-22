@@ -30,3 +30,8 @@ export type Error = {
     message: string;
     isError: boolean;
 };
+
+export type OnSearchValues = {
+    query: string;
+    perPage: number;
+};

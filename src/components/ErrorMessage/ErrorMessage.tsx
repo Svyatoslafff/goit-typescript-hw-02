@@ -1,8 +1,9 @@
 import { MdOutlineError } from 'react-icons/md';
 import { IoReloadCircle } from 'react-icons/io5';
+import React from 'react';
 import css from './ErrorMessage.module.scss';
 
-export default function ErrorMessage({ message }) {
+export default function ErrorMessage({ message }: { message: string }) {
     return (
         <div className={css.errorContainer}>
             <div className={css.messageContainer}>
@@ -17,6 +18,7 @@ export default function ErrorMessage({ message }) {
                     className={css.pageReload}
                     onClick={() => window.location.reload()}
                 >
+                    ''
                     <IoReloadCircle size={60} className={css.reloadIcon} />
                 </button>
             </div>

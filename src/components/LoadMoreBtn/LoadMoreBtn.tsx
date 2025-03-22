@@ -1,6 +1,8 @@
 import css from './LoadMoreBtn.module.scss';
-export default function LoadMoreBtn({ onLoadMore }) {
-    function handleClick() {
+import React from 'react';
+
+export default function LoadMoreBtn({ onLoadMore }: { onLoadMore(): void }) {
+    function handleClick(): void {
         onLoadMore();
     }
     return (

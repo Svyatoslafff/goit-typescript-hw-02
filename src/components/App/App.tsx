@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-// import css from './App.module.scss';
 import css from './App.module.scss';
 import * as types from './App.types';
 import * as api from '../../api';
@@ -87,16 +86,12 @@ function App() {
         getData();
     }, [request, page]);
 
-    // function onSearch(value: requestQuery) {
-    function onSearch(value: { query: string; perPage: number }): void {
+    function onSearch(value: types.OnSearchValues): void {
         setImages([]);
         setPage(1);
 
         setRequest(value);
     }
-    //
-    //
-    //
 
     function onLoadMore(): void {
         setPage(previousPage => previousPage + 1);

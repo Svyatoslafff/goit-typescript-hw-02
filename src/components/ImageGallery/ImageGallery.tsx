@@ -1,15 +1,12 @@
 import ImageCard from '../ImageCard/ImageCard';
 import css from './ImageGallery.module.scss';
-import React, { ReactElement } from 'react';
-import { ImagesArray } from '../App/App.types';
+import React from 'react';
+import * as types from './ImageGallery.types';
 
 export default function ImageGallery({
     images,
     onOpenModal,
-}: {
-    images: ImagesArray;
-    onOpenModal: (id: string) => void;
-}): ReactElement {
+}: types.ImageGallseryProps) {
     return (
         <ul className={css.galleryList}>
             {images.map(image => {

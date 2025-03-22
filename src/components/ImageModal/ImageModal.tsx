@@ -4,6 +4,7 @@ import { IoIosHeartEmpty } from 'react-icons/io';
 import css from './ImageModal.module.scss';
 import Modal from 'react-modal';
 import React, { ReactElement } from 'react';
+import * as types from './ImageModal.types';
 
 const modalStyles = {
     overlay: {
@@ -24,7 +25,7 @@ export default function ImageModal({
     img,
     alt,
     creator: { name, location },
-}): ReactElement {
+}: types.ImageModalProps): ReactElement {
     Modal.setAppElement('#root');
     return (
         <Modal

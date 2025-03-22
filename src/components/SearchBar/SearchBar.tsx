@@ -1,16 +1,20 @@
 import { Formik, Form, Field } from 'formik';
 import { GrSearch } from 'react-icons/gr';
 import { toast } from 'react-hot-toast';
+import * as types from './SearchBar.types';
+import { OnSearchValues } from '../App/App.types';
+
+import React from 'react';
 
 import css from './SearchBar.module.scss';
 
-export default function SearchBar({ onSearch, perPage }) {
+export default function SearchBar({ onSearch, perPage }: types.SearchBarProps) {
     const initialValues = {
         query: '',
         perPage: perPage,
     };
 
-    function handleSubmit(value, action) {
+    function handleSubmit(value: OnSearchValues, action) {
         if (value.query === '') {
             toast.error('Please write something to search!');
             return;
@@ -44,6 +48,7 @@ export default function SearchBar({ onSearch, perPage }) {
                             className={css.requestInput}
                         />
                         <button type="submit">
+                            ''
                             <GrSearch color="black" />
                         </button>
                     </div>
