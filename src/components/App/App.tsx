@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
+// import css from './App.module.scss';
 import css from './App.module.scss';
-import * as api from '/src/api.js';
+import * as types from './App.types';
+import * as api from '../../api';
 import SearchBar from '../SearchBar/SearchBar';
 import ImageGallery from '../ImageGallery/ImageGallery';
 import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn';
@@ -14,27 +16,35 @@ import ImageModal from '../ImageModal/ImageModal';
 
 function App() {
     // states
-    const [images, setImages] = useState([]);
+    const [images, setImages] = useState<types.ImagesArray>([]);
     const [request, setRequest] = useState({ query: 'animals', perPage: 9 });
     const [loaderIsActive, setLoaderIsActive] = useState(false);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
-    const [isError, setIsError] = useState(false);
+    const [error, setError] = useState<types.Error>({
+        message: '',
+        isError: false,
+    });
 
     // images loading
     useEffect(() => {
         async function getData() {
             try {
-                setIsError(false);
+                setError({
+                    ...error,
+                    isError: false,
+                });
                 setLoaderIsActive(true);
 
-                const newImages = (
-                    await api.searchByRequest({
+                const newImages: types.imagesData = (
+                    await api.searchByRequest<{ data: types.imagesData }>({
                         request: request.query,
                         perPage: request.perPage,
                         page,
                     })
                 ).data;
+
+                console.log(newImages);
 
                 if (newImages.total === 0) {
                     toast.error(
@@ -58,11 +68,14 @@ function App() {
                 setImages([...images, ...imagesToShow]);
             } catch (error) {
                 toast.error('Error');
-                setIsError(error);
+                setError({
+                    message: error,
+                    isError: true,
+                });
             } finally {
                 setLoaderIsActive(false);
                 if (page !== 1) {
-                    const scrollHeight = screen.height - 120 * 2;
+                    const scrollHeight: number = screen.height - 120 * 2;
                     console.log(scrollHeight);
 
                     scroll.scrollMore(scrollHeight, {
@@ -74,14 +87,18 @@ function App() {
         getData();
     }, [request, page]);
 
-    function onSearch(value) {
+    // function onSearch(value: requestQuery) {
+    function onSearch(value: { query: string; perPage: number }): void {
         setImages([]);
         setPage(1);
 
         setRequest(value);
     }
+    //
+    //
+    //
 
-    function onLoadMore() {
+    function onLoadMore(): void {
         setPage(previousPage => previousPage + 1);
     }
 
@@ -89,13 +106,15 @@ function App() {
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [modalUserInfo, setModalUserInfo] = useState({
         likes: 0,
-        user: '',
-        regularImgUrl: '',
+        user: { name: '', location: '' },
+        urls: {
+            regular: '',
+        },
         alt_description: '',
     });
 
     useEffect(() => {
-        const body = document.querySelector('body');
+        const body = document.querySelector('body') as HTMLBodyElement;
         if (isOpenModal === true) {
             body.classList.add('body-scroll-lock');
         } else {
@@ -103,23 +122,29 @@ function App() {
         }
     }, [isOpenModal]);
 
-    function openModal(id) {
-        const {
-            likes,
-            user,
-            alt_description,
-            urls: { regular },
-        } = images.find(image => image.id === id);
+    function openModal(id: string): void {
+        const image = images.find(image => image.id === id);
+        if (image) {
+            const {
+                likes,
+                user,
+                alt_description,
+                urls: { regular },
+            }: types.Image = image;
 
-        setModalUserInfo({
-            likes,
-            user,
-            regularImgUrl: regular,
-            alt_description,
-        });
-        setIsOpenModal(true);
+            setModalUserInfo({
+                likes,
+                user,
+                urls: { regular },
+                alt_description,
+            });
+
+            setIsOpenModal(true);
+        } else {
+            setError({ message: 'image is not found!', isError: true });
+        }
     }
-    function closeModal() {
+    function closeModal(): void {
         setIsOpenModal(false);
     }
 
@@ -127,14 +152,10 @@ function App() {
         <>
             <SearchBar onSearch={onSearch} perPage={request.perPage} />
             <main className={css.main}>
-                {isError === false ? (
-                    <ImageGallery
-                        images={images}
-                        onOpenModal={openModal}
-                        onCloseModal={closeModal}
-                    />
+                {!error.isError ? (
+                    <ImageGallery images={images} onOpenModal={openModal} />
                 ) : (
-                    <ErrorMessage message={isError.message} />
+                    <ErrorMessage message={error.message} />
                 )}
                 {loaderIsActive === true && (
                     <ThreeDots
@@ -149,7 +170,7 @@ function App() {
                     />
                 )}
                 {images.length > 0 &&
-                    isError === false &&
+                    error.isError === false &&
                     page !== totalPages &&
                     loaderIsActive === false && (
                         <LoadMoreBtn onLoadMore={onLoadMore} />
@@ -160,7 +181,7 @@ function App() {
                 closeModal={closeModal}
                 likes={modalUserInfo.likes}
                 creator={modalUserInfo.user}
-                img={modalUserInfo.regularImgUrl}
+                img={modalUserInfo.urls.regular}
                 alt={modalUserInfo.alt_description}
             />
         </>

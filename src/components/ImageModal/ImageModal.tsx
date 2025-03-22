@@ -3,6 +3,7 @@ import { FaMapLocationDot } from 'react-icons/fa6';
 import { IoIosHeartEmpty } from 'react-icons/io';
 import css from './ImageModal.module.scss';
 import Modal from 'react-modal';
+import React, { ReactElement } from 'react';
 
 const modalStyles = {
     overlay: {
@@ -23,7 +24,7 @@ export default function ImageModal({
     img,
     alt,
     creator: { name, location },
-}) {
+}): ReactElement {
     Modal.setAppElement('#root');
     return (
         <Modal
